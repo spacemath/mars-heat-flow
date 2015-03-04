@@ -22,23 +22,13 @@ class Mars extends d3Object
     
     constructor: () ->
         super "mars"
-
+        
         @obj.attr("width", width + margin.left + margin.right)
         @obj.attr("height", height + margin.top + margin.bottom)
-
-        ###
-        @obj.append('circle')
-            .attr("cx", 100)
-            .attr("cy", 100)
-            .attr('r',50)
-            .style('fill', 'red')
-            .style('stroke', 'green')
-            .style('stroke-width','10')
-        ###
-
-        pulse = () =>
+        
+        pulse = =>
             circle = @obj.select("circle")
-            repeat = () ->
+            repeat = ->
                 circle = circle.transition()
                     .duration(2000)
                     .attr("stroke-width", 20)
@@ -48,15 +38,16 @@ class Mars extends d3Object
                     .attr('stroke-width', 0.5)
                     .attr("r", 200)
                     .ease('sine')
-                    .each("end", repeat())
-
+                    .each("end", repeat)
+            repeat()
+            
         @heat = @obj.append('circle')
             .attr("cx", width/2)
             .attr("cy", height/2)
             .style('fill', 'transparent')
             .style('stroke', 'red')
             .style('stroke-width','1')
-            .attr('r',10)
-            .each(pulse())
+            .attr('r', 10)
+            .each(pulse)
 
 new Mars
