@@ -22,6 +22,19 @@ svg {
     clear: both;
 }
 
+path {
+  fill: none;
+  stroke-linejoin: round;
+}
+
+.sphere, {
+  stroke: #aaa;
+}
+
+.graticule {
+  stroke: #aaa;
+}
+
 .foot .puzlet-link { float:left }
 .foot .org-link { float:right }
 
