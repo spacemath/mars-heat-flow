@@ -90,10 +90,17 @@ class Mars extends d3Object
 
 class Data
 
-    margin = {top: 0, right: 0, bottom: 0, left: 0}
-    @width = 480 - margin.left - margin.right
-    @height = 480 - margin.top - margin.bottom
+    @margin = {top: 0, right: 50, bottom: 0, left: 50}
+    @width = 480
+    @height = 480
     @boreDia = 50
+    
+    @d2px = d3.scale.linear() # to pixels 
+        .domain([0, 5])
+        .range([0, @width-100])
+
+    @px2d = @d2px.invert # to temperature
+
 
 class Crust extends d3Object
 
@@ -124,8 +131,6 @@ class Crust extends d3Object
             .attr("stop-color", "#fcc")
             .attr("stop-opacity", 1);
 
-
-        
         soil = @obj.append("rect")
             .attr('y', Data.height/2 - height/2)
             .attr("width", width)
@@ -139,12 +144,10 @@ class Crust extends d3Object
             .style("fill", 'grey');
 
 
+
+
 class Thermo extends d3Object
 
-    #margin = {top: 20, right: 20, bottom: 20, left: 20}
-    #width = 480 - margin.left - margin.right
-    #height = 480 - margin.top - margin.bottom
-    
     constructor: ->
         
         super "thermo"
@@ -183,7 +186,59 @@ class Thermo extends d3Object
     val: (val) -> @thermoDisp.value(val)
 
 
+class Control extends d3Object
+
+    constructor: ->
+        
+        super "control"
+
+        y = 100
+        
+        #@obj.attr("width", Data.width - 100)
+        #@obj.attr("height", 100)
+
+        @tape = @obj.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(#{50}, #{y-20})")
+                .call(@xAxis) 
+
+        @marker()
+            .attr("cx", 0)
+            .attr("cy", 0)
+
+    marker: () ->
+        m = @tape.append('circle')
+            .attr('r',10)
+            .style('fill', 'black')
+            .style('stroke', 'black')
+            .style('stroke-width','1')
+            .call(
+                d3.behavior
+                .drag()
+                .origin(=>
+                    x:m.attr("cx")
+                    y:m.attr("cy")
+                )
+                #.on("drag", => @dragMarker(m, d3.mouse(@plotArea.node())))
+                .on("drag", => @dragMarker(m, d3.event.x))
+            )
+
+    dragMarker: (marker, x) ->
+        d = Data.px2d x
+        return if  ((d>5) or (d<0))
+        marker.attr("cx", x)
+        
+
+    initAxes: ->
+        @xAxis = d3.svg.axis()
+            .scale(Data.d2px)
+            .orient("top")
+            .ticks(10)
+            #.tickValues(11)
+            #.outerTickSize([0])
+
 new Mars
 new Crust
 thermo = new Thermo
 thermo.val 888.8
+control = new Control

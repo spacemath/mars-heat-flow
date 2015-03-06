@@ -45,7 +45,7 @@ svg {
     margin: 0 auto;
 }
 
-#crust, #thermo {
+#crust, #thermo, #control {
     position: absolute;
     left: 0;
     top:  0;
@@ -74,6 +74,13 @@ path {
 .graticule {
   stroke: #aaa;
 }
+
+.axis path, .axis line {
+  fill: none;
+  stroke: steelblue;
+  shape-rendering: crispEdges;
+}
+
 
 .foot .puzlet-link { float:left }
 .foot .org-link { float:right }
