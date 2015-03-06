@@ -185,6 +185,8 @@ class Thermo extends d3Object
             
     val: (val) -> @thermoDisp.value(val)
 
+    depth: (u) -> @lift.attr("transform", "translate(#{Data.d2px(u)}, 0)")
+
 
 class Control extends d3Object
 
@@ -194,9 +196,6 @@ class Control extends d3Object
 
         y = 100
         
-        #@obj.attr("width", Data.width - 100)
-        #@obj.attr("height", 100)
-
         @tape = @obj.append("g")
             .attr("class", "axis")
             .attr("transform", "translate(#{50}, #{y-20})")
@@ -227,6 +226,7 @@ class Control extends d3Object
         d = Data.px2d x
         return if  ((d>5) or (d<0))
         marker.attr("cx", x)
+        thermo.depth d
         
 
     initAxes: ->
@@ -234,11 +234,11 @@ class Control extends d3Object
             .scale(Data.d2px)
             .orient("top")
             .ticks(10)
-            #.tickValues(11)
-            #.outerTickSize([0])
 
 new Mars
 new Crust
 thermo = new Thermo
 thermo.val 888.8
+thermo.depth 3
+
 control = new Control
