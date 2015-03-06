@@ -95,12 +95,17 @@ class Data
     @height = 480
     @boreDia = 50
     
-    @d2px = d3.scale.linear() # to pixels 
+    @d2px = d3.scale.linear() # depth to pixels 
         .domain([0, 5])
         .range([0, @width-100])
 
-    @px2d = @d2px.invert # to temperature
+    @px2d = @d2px.invert # pixels to depth
 
+    @d2T = d3.scale.linear() # depth to temperature 
+        .domain([0, 5])
+        .range([200, 300])
+
+    @T2d = @d2T.invert # temperature to depth
 
 class Crust extends d3Object
 
@@ -144,8 +149,6 @@ class Crust extends d3Object
             .style("fill", 'grey');
 
 
-
-
 class Thermo extends d3Object
 
     constructor: ->
@@ -183,7 +186,7 @@ class Thermo extends d3Object
         #    .text("GMS braking starts:")
         #    .attr("title","Global mitigation scheme (GMS) starts at this date.")
             
-    val: (val) -> @thermoDisp.value(val)
+    val: (u) -> @thermoDisp.value(Data.d2T u)
 
     depth: (u) -> @lift.attr("transform", "translate(#{Data.d2px(u)}, 0)")
 
@@ -195,6 +198,7 @@ class Control extends d3Object
         super "control"
 
         y = 100
+        @d = 0
         
         @tape = @obj.append("g")
             .attr("class", "axis")
@@ -223,11 +227,11 @@ class Control extends d3Object
             )
 
     dragMarker: (marker, x) ->
-        d = Data.px2d x
-        return if  ((d>5) or (d<0))
+        @d = Data.px2d x
+        return if  ((@d>5) or (@d<0))
         marker.attr("cx", x)
-        thermo.depth d
-        
+        thermo.depth @d
+        thermo.val @d
 
     initAxes: ->
         @xAxis = d3.svg.axis()
@@ -235,10 +239,33 @@ class Control extends d3Object
             .orient("top")
             .ticks(10)
 
+
+class Simulation
+
+    constructor: ->
+        @a = 0.5
+        @T = 0
+        
+    start: () ->
+        setTimeout (=> @animate() ), 200
+        
+    snapshot: () ->
+        @T = (1-@a)*@T + @a*Data.d2T(control.d)
+        thermo.val @T
+
+    animate: () ->
+        @timer = setInterval (=> @snapshot()), 1000
+
+    stop: ->
+        clearInterval @timer
+        @timer = null
+
+
 new Mars
 new Crust
 thermo = new Thermo
-thermo.val 888.8
-thermo.depth 3
 
+thermo.depth 3
 control = new Control
+sim = new Simulation
+sim.start()
