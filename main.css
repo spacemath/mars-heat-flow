@@ -22,6 +22,46 @@ svg {
     clear: both;
 }
 
+
+#heat {
+    position: relative;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+}
+
+
+#test, #mars {
+    position: absolute;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+}
+
+#data {
+    position: relative;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+}
+
+#crust, #thermo {
+    position: absolute;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+}
+
+.digital-display .on {
+    fill: black;
+}
+
+.digital-display .off {
+    fill: white;
+    opacity: 0;
+}
+
+
 path {
   fill: none;
   stroke-linejoin: round;

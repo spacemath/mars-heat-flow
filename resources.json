@@ -1,5 +1,6 @@
 [
     "https://api.github.com/repos/flot/flot/contents/jquery.flot.symbol.js",
+    "https://api.github.com/repos/metormote/iopctrl/contents/iopctrl.js",
     "http://puzlet.org/puzlet/js/d3.min.js",
     "main.coffee",
     "work.coffee",
