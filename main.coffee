@@ -97,7 +97,15 @@ class Data
     
     @d2px = d3.scale.linear() # depth to pixels 
         .domain([0, 5])
-        .range([0, @width-100])
+        .range([0, @width])
+
+    @px2d = @d2px.invert # pixels to depth
+
+    @T2px = d3.scale.linear() # depth to pixels 
+        .domain([200, 300])
+        .range([@height, 0])
+
+    @px2T = @T2px.invert
 
     @px2d = @d2px.invert # pixels to depth
 
@@ -164,7 +172,8 @@ class Thermo extends d3Object
             .decimals(1)
 
         @lift = @obj.append('g')
-            .attr("transform", "translate(100, 0)")
+
+
 
         @lift.append("rect")
             .attr('x', 0)
@@ -179,6 +188,8 @@ class Thermo extends d3Object
             .attr("transform", "translate(10, #{y+10})")
             .call(@thermoDisp)
         
+        @depth 0
+
         #@obj.append("text")
         #    .attr("text-anchor", "left")
         #    .attr("x", 50)
@@ -186,7 +197,7 @@ class Thermo extends d3Object
         #    .text("GMS braking starts:")
         #    .attr("title","Global mitigation scheme (GMS) starts at this date.")
             
-    val: (u) -> @thermoDisp.value(Data.d2T u)
+    val: (u) -> @thermoDisp.value(u)
 
     depth: (u) -> @lift.attr("transform", "translate(#{Data.d2px(u)}, 0)")
 
@@ -202,16 +213,24 @@ class Control extends d3Object
         
         @tape = @obj.append("g")
             .attr("class", "axis")
-            .attr("transform", "translate(#{50}, #{y-20})")
+            .attr("transform", "translate(#{0}, #{y-20})")
                 .call(@xAxis) 
+
+        @guide = @obj.append('line')
+            .attr('x1', 0)
+            .attr('x2', 0)
+            .attr('y1', 0)
+            .attr('y2', Data.height)
+            .style("stroke", 'black')
+            .style("stroke-width","1")
 
         @marker()
             .attr("cx", 0)
-            .attr("cy", 0)
+            .attr("cy", 25)
 
     marker: () ->
         m = @tape.append('circle')
-            .attr('r',10)
+            .attr('r', 15)
             .style('fill', 'black')
             .style('stroke', 'black')
             .style('stroke-width','1')
@@ -231,7 +250,9 @@ class Control extends d3Object
         return if  ((@d>5) or (@d<0))
         marker.attr("cx", x)
         thermo.depth @d
-        thermo.val @d
+        @guide.attr('x1', x)
+        @guide.attr('x2', x)
+        
 
     initAxes: ->
         @xAxis = d3.svg.axis()
@@ -239,12 +260,95 @@ class Control extends d3Object
             .orient("top")
             .ticks(10)
 
+class Plot extends d3Object
+
+    margin = {top: 20, right: 20, bottom: 20, left: 20}
+    width = 480 - margin.left - margin.right
+    height = 480 - margin.top - margin.bottom
+    
+    constructor: (@data) ->
+        
+        super "plot"
+
+        @obj.attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+
+        plot = @obj.append('g')
+            .attr("transform", "translate( #{margin.left}, #{margin.top})")
+            .attr('width', width)
+            .attr('height', height)
+
+        plot.append("g")
+            .attr("id","x-axis")
+            .attr("class", "axis")
+            .attr("transform", "translate(0, #{height})")
+            .call(@xAxis)
+
+        plot.append("g")
+            .attr("id","y-axis")
+            .attr("class", "axis")
+            .attr("transform", "translate(0, 0)")
+            .call(@yAxis)
+
+        plot.selectAll("line.horizontalGrid")
+            .data(Data.T2px.ticks(4))
+            .enter()
+            .append("line")
+            .attr("class", "horizontalGrid")
+            .attr("x1", 0)
+            .attr("x2", width)
+            .attr("y1", (d) -> Data.T2px d)
+            .attr("y2", (d) -> Data.T2px d)
+            .attr("fill", "none")
+            .attr("shape-rendering", "crispEdges")
+            .attr("stroke", "black")
+            .attr("stroke-width", "1px")
+
+        plot.selectAll("line.verticalGrid")
+            .data(Data.d2px.ticks(4))
+            .enter()
+            .append("line")
+            .attr("class", "verticalGrid")
+            .attr("y1", 0)
+            .attr("y2", height)
+            .attr("x1", (d) -> Data.d2px d)
+            .attr("x2", (d) -> Data.d2px d)
+            .attr("fill", "none")
+            .attr("shape-rendering", "crispEdges")
+            .attr("stroke", "black")
+            .attr("stroke-width", "1px")
+
+        data = [[2, 240], [3, 250]]
+
+        plot.selectAll("circle.marker")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("class", "marker")
+            .attr("cx", (d) -> Data.d2px d[0])
+            .attr("cy", (d) -> Data.T2px d[1])
+            .attr("r", "5")
+            .attr("fill", "none")
+            .attr("shape-rendering", "crispEdges")
+            .attr("stroke", "black")
+            .attr("stroke-width", "1px")
+
+
+    initAxes: ->
+
+        @xAxis = d3.svg.axis()
+            .scale(Data.d2px)
+            .orient("bottom")
+
+        @yAxis = d3.svg.axis()
+            .scale(Data.T2px)
+            .orient("left")
 
 class Simulation
 
     constructor: ->
         @a = 0.5
-        @T = 0
+        @T = 200
         
     start: () ->
         setTimeout (=> @animate() ), 200
@@ -260,12 +364,10 @@ class Simulation
         clearInterval @timer
         @timer = null
 
-
 new Mars
 new Crust
 thermo = new Thermo
-
-thermo.depth 3
 control = new Control
 sim = new Simulation
 sim.start()
+new Plot

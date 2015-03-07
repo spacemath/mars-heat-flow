@@ -52,6 +52,21 @@ svg {
     margin: 0 auto;
 }
 
+#analyze {
+    position: relative;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+}
+
+#plot {
+    position: absolute;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+}
+
+
 .digital-display .on {
     fill: black;
 }
