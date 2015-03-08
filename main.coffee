@@ -271,7 +271,9 @@ class Plot extends d3Object
         super "plot"
 
         @obj.attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
+            .attr('height', height/2 + margin.top + margin.bottom)
+
+        ###
 
         plot = @obj.append('g')
             .attr("transform", "translate( #{margin.left}, #{margin.top})")
@@ -332,7 +334,7 @@ class Plot extends d3Object
             .attr("shape-rendering", "crispEdges")
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
-
+        ###
 
     initAxes: ->
 
@@ -364,6 +366,165 @@ class Simulation
         clearInterval @timer
         @timer = null
 
+class Guide extends d3Object
+
+    r = 10 # circle radius
+    margin = {top: 20, right: 20, bottom: 20, left: 20}
+    width = 480 - margin.left - margin.right
+    height = 480 - margin.top - margin.bottom
+    
+    constructor: ()->
+        
+        super "guide"
+
+        # housekeeping
+        @obj.on("click", null)  # Clear any previous event handlers.
+        #@obj.on("click", => @click())
+        d3.behavior.drag().on("drag", null)  # Clear any previous event handlers.
+
+        @obj.attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+
+        @region = @obj.append('g')
+            .attr("transform", "translate( #{margin.left}, #{margin.top})")
+            .attr('width', width)
+            .attr('height', height)
+
+        # Initial marker positions
+        @x1 = Data.d2px 1.5
+        @y1 = Data.T2px 230 
+        @x2 = Data.d2px 4
+        @y2 = Data.T2px 270
+        @xl = Data.d2px 2
+        @yl = Data.T2px 250
+        
+        @circle1 = @region.append("circle")
+            .attr("transform", "translate(#{@x1}, #{@y1})")
+            .attr("r", r)
+            .attr("xx", @x1)
+            .attr("yy", @y1)
+            .attr("class", "modelcircle")
+            .call(
+                d3.behavior
+                .drag()
+                .on("drag", => @moveCircle(@circle1, d3.event.x, d3.event.y))
+            )
+
+        @circle2 = @region.append("circle")
+            .attr("transform", "translate(#{@x2}, #{@y2})")
+            .attr("r", r)
+            .attr("xx", @x2)
+            .attr("yy", @y2)
+            .attr("class", "modelcircle")
+            .call(
+                d3.behavior
+                .drag()
+                .on("drag", => @moveCircle(@circle2, d3.event.x, d3.event.y))
+            )
+
+        # line connecting circles
+        @line12 = @region.append("line")
+            .attr("x1", @x1)
+            .attr("y1", @y1)
+            .attr("x2", @x2)
+            .attr("y2", @y2)
+            .attr("class", "modelline")
+
+        # vertical dashed line
+        @lineX = @region.append("line")
+            .attr("x1", 0)
+            .attr("y1", margin.top)
+            .attr("x2", 0)
+            .attr("y2", height + margin.top)
+            .attr("class","guideline")
+            .attr("transform", "translate(#{@x1}, #{0})")
+            .attr("xx", @xl)
+            .attr("yy", 0)
+            .attr("style","cursor:crosshair")
+            .call(
+                d3.behavior
+                .drag()
+                .on("drag", => @moveLine(@lineX, d3.event.x, -1))
+            )
+
+        # horizontal dashed line
+        @lineY = @region.append("line")
+            .attr("x1", margin.left)
+            .attr("y1", 0)
+            .attr("x2", width + margin.left)
+            .attr("y2", 0)
+            .attr("class","guideline")
+            .attr("transform", "translate(#{0}, #{@y2})")
+            .attr("xx", 0)
+            .attr("yy", @yl)
+            .attr("style","cursor:crosshair")
+            .call(
+                d3.behavior
+                .drag()
+                .on("drag", => @moveLine(@lineY, -1, d3.event.y))
+            )
+ 
+    initAxes: ->
+   
+    moveCircle: (circ, x, y) ->
+        console.log "?????"
+        @dragslide(circ, x, y)
+        x1 = @circle1.attr("xx")
+        y1 = @circle1.attr("yy")
+        x2 = @circle2.attr("xx")
+        y2 = @circle2.attr("yy")
+        @line12.attr("x1",x1)
+            .attr("y1",y1)
+            .attr("x2",x2)
+            .attr("y2",y2)
+        slope = (Data.px2T(y2)-Data.px2T(y1))/(Data.px2d(x2)-Data.px2d(x1))
+        inter = Data.px2T(y1)-slope*Data.px2d(x1)
+        d3.select("#equation").html(model_text([inter, slope]))
+
+    moveLine: (line, x, y) ->
+        @dragslide(line, x, y)
+        xx = @lineX.attr("xx")
+        yy = @lineY.attr("yy")
+        d3.select("#intersection")
+            .html(lines_text([@x.invert(xx), @y.invert(yy)]))
+
+    dragslide: (obj, x, y) ->
+        xx = 0
+        yy = 0
+        if x>0
+            xx = Math.max(margin.left, Math.min(width+margin.left, x))
+        if y>0
+            yy = Math.max(margin.top, Math.min(height+margin.top, y))
+        obj.attr "transform", "translate(#{xx}, #{yy})"
+        obj.attr("xx", xx)
+        obj.attr("yy", yy)
+
+    model_text = (p) ->
+        a = (n) -> Math.round(100*p[n])/100
+        s = (n) -> "<span style='color:green;font-size:14px'>#{a(n)}</span>"
+        tr = (td1, td2) -> 
+            "<tr><td style='text-align:right;'>#{td1}</td><td>#{td2}</td><tr/>"
+        """
+        <table class='func'>
+        Model:
+        #{tr "a = ", s(1)}
+        #{tr "b = ", s(0)}
+        </table>
+        """    
+
+    lines_text = (p) ->
+        a = (n) -> Math.round(100*p[n])/100
+        s = (n) -> "<span style='color:red;font-size:14px'>#{a(n)}</span>"
+        tr = (td1, td2) -> 
+            "<tr><td style='text-align:right;'>#{td1}</td><td>#{td2}</td><tr/>"
+        """
+        <table class='func'>
+        Crosshair:
+        #{tr "x = ", s(0)}
+        #{tr "T = ", s(1)}
+        </table>
+        """    
+
 new Mars
 new Crust
 thermo = new Thermo
@@ -371,3 +532,4 @@ control = new Control
 sim = new Simulation
 sim.start()
 new Plot
+new Guide
