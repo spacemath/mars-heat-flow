@@ -64,7 +64,33 @@ svg {
     left: 0;
     top:  0;
     margin: 0 auto;
+    z-index: 0;
 }
+
+#guide {
+    position: absolute;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+    z-index: 0;
+}
+
+
+.modelline {
+    fill: none;
+    stroke: green;
+    stroke-width: 2;
+    /*shape-rendering: crispEdges;*/
+}
+
+.modelcircle {
+    fill: green;
+    stroke: green;
+    stroke-width: 1;
+    /*shape-rendering: crispEdges;*/
+    cursor: pointer;
+}
+
 
 
 .digital-display .on {

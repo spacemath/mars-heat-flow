@@ -4,6 +4,38 @@ pi = Math.PI
 
 $("#test").attr 'src', 'test.png'
 
+$("#idea").attr 'src', 'Mars_pathfinder_panorama_large.jpg'
+$("#data").attr 'src', 'Antwrp_gsfc_nasa_gov_apod_ap040510.jpg'
+$("#analysis").attr 'src', 'Eagle_crater_on_the_Mars_PIA05163.jpg'
+
+
+class Fig
+
+    @margin = {top: 0, right: 0, bottom: 0, left: 0}
+    @width = 480 - @margin.left - @margin.right
+    @height = 480 - @margin.top - @margin.bottom
+
+    @boreDia = 50
+
+    # depth <-> pixels
+    @d2px = d3.scale.linear()
+        .domain([0, 5])
+        .range([0, @width])
+    @px2d = @d2px.invert
+
+    # temperature <-> pixels
+    @T2px = d3.scale.linear()
+        .domain([200, 300])
+        .range([@height, 0])
+    @px2T = @T2px.invert
+
+    # depth <-> temperature
+    @d2T = d3.scale.linear()
+        .domain([0, 5])
+        .range([200, 300])
+    @T2d = @d2T.invert
+
+
 class d3Object
 
     constructor: (id) ->
@@ -18,15 +50,11 @@ class d3Object
 
 class Mars extends d3Object
 
-    margin = {top: 20, right: 20, bottom: 20, left: 20}
-    width = 480 - margin.left - margin.right
-    height = 480 - margin.top - margin.bottom
-    
     constructor: () ->
         super "mars"
         
-        @obj.attr("width", width + margin.left + margin.right)
-        @obj.attr("height", height + margin.top + margin.bottom)
+        @obj.attr("width", Fig.width + Fig.margin.left + Fig.margin.right)
+        @obj.attr("height", Fig.height + Fig.margin.top + Fig.margin.bottom)
 
         radialGradient = @obj.append("defs").append("radialGradient")
             .attr("id", "rad-gradient")
@@ -42,39 +70,43 @@ class Mars extends d3Object
             .attr("stop-color", "#faa");
 
         pulse = =>
-            circle = @obj.select("circle")
+            circle = @obj.select("#mars-heat")
             repeat = ->
-                circle = circle.transition()
+                circle = circle
+                    .transition()
+                    .duration(1000)
+                    .attr("opacity", 0)
+                    .attr("r", 10)
+                    .transition()
                     .duration(20)
-                    .attr("stroke-width", 5)
                     .attr("opacity", 1)
                     .attr("r", 10)
                     .transition()
-                    .duration(5000)
-                    .attr('stroke-width', 0.5)
+                    .duration(10000)
                     .attr("opacity", 0)
-                    .attr("r", 100)
+                    .attr("r", 200)
                     .ease('linear')
                     .each("end", repeat)
             repeat()
 
         @obj.append("circle")
-            .attr("cx", width / 2)
-            .attr("cy", height / 2)
-            .attr("r", 240)
+            .attr("id", "mars-heat")
+            .attr("cx", Fig.width / 2)
+            .attr("cy", Fig.height / 2)
             .style("fill", "url(#rad-gradient)")
             .each(pulse)
 
-        projection = d3.geo.orthographic()
-            .scale(60)
-            .translate([width / 2, height / 2])
+        @projection = d3.geo.orthographic()
+            .scale(120)
+            .translate([Fig.width / 2, Fig.height / 2])
             .clipAngle(90 + 1e-6)
-            .precision(.3);
+            .precision(.3)
+            .rotate([0, -45, 0])
 
         path = d3.geo.path()
-            .projection(projection);
+            .projection(@projection)
 
-        graticule = d3.geo.graticule();
+        graticule = d3.geo.graticule()
 
         @obj.append("path")
             .datum({type: "Sphere"})
@@ -88,40 +120,13 @@ class Mars extends d3Object
             .attr("d", path);
 
 
-class Data
-
-    @margin = {top: 0, right: 50, bottom: 0, left: 50}
-    @width = 480
-    @height = 480
-    @boreDia = 50
-    
-    @d2px = d3.scale.linear() # depth to pixels 
-        .domain([0, 5])
-        .range([0, @width])
-
-    @px2d = @d2px.invert # pixels to depth
-
-    @T2px = d3.scale.linear() # depth to pixels 
-        .domain([200, 300])
-        .range([@height, 0])
-
-    @px2T = @T2px.invert
-
-    @px2d = @d2px.invert # pixels to depth
-
-    @d2T = d3.scale.linear() # depth to temperature 
-        .domain([0, 5])
-        .range([200, 300])
-
-    @T2d = @d2T.invert # temperature to depth
-
 class Crust extends d3Object
 
     constructor: () ->
         super "crust"
 
-        width = Data.width
-        height = Data.height*0.4
+        width = Fig.width
+        height = Fig.height*0.4
         
         @obj.attr("width", width)
         @obj.attr("height", height)
@@ -145,15 +150,15 @@ class Crust extends d3Object
             .attr("stop-opacity", 1);
 
         soil = @obj.append("rect")
-            .attr('y', Data.height/2 - height/2)
+            .attr('y', Fig.height/2 - height/2)
             .attr("width", width)
             .attr("height", height)
             .style("fill", "url(#lin-gradient)");
 
         bore = @obj.append("rect")
-            .attr('y', Data.height/2 - Data.boreDia/2)
+            .attr('y', Fig.height/2 - Fig.boreDia/2)
             .attr("width", width)
-            .attr("height", Data.boreDia)
+            .attr("height", Fig.boreDia)
             .style("fill", 'grey');
 
 
@@ -163,7 +168,7 @@ class Thermo extends d3Object
         
         super "thermo"
 
-        y = Data.height/2 - Data.boreDia/2
+        y = Fig.height/2 - Fig.boreDia/2
         
         @thermoDisp = iopctrl.segdisplay()
             .width(80)
@@ -179,7 +184,7 @@ class Thermo extends d3Object
             .attr('x', 0)
             .attr('y', y)
             .attr("width", 100)
-            .attr("height", Data.boreDia)
+            .attr("height", Fig.boreDia)
             .style("fill", "green")
             .style("opacity", 0.5);
         
@@ -199,7 +204,7 @@ class Thermo extends d3Object
             
     val: (u) -> @thermoDisp.value(u)
 
-    depth: (u) -> @lift.attr("transform", "translate(#{Data.d2px(u)}, 0)")
+    depth: (u) -> @lift.attr("transform", "translate(#{Fig.d2px(u)}, 0)")
 
 
 class Control extends d3Object
@@ -220,7 +225,7 @@ class Control extends d3Object
             .attr('x1', 0)
             .attr('x2', 0)
             .attr('y1', 0)
-            .attr('y2', Data.height)
+            .attr('y2', Fig.height)
             .style("stroke", 'black')
             .style("stroke-width","1")
 
@@ -246,7 +251,7 @@ class Control extends d3Object
             )
 
     dragMarker: (marker, x) ->
-        @d = Data.px2d x
+        @d = Fig.px2d x
         return if  ((@d>5) or (@d<0))
         marker.attr("cx", x)
         thermo.depth @d
@@ -256,7 +261,7 @@ class Control extends d3Object
 
     initAxes: ->
         @xAxis = d3.svg.axis()
-            .scale(Data.d2px)
+            .scale(Fig.d2px)
             .orient("top")
             .ticks(10)
 
@@ -272,8 +277,6 @@ class Plot extends d3Object
 
         @obj.attr('width', width + margin.left + margin.right)
             .attr('height', height/2 + margin.top + margin.bottom)
-
-        ###
 
         plot = @obj.append('g')
             .attr("transform", "translate( #{margin.left}, #{margin.top})")
@@ -293,28 +296,28 @@ class Plot extends d3Object
             .call(@yAxis)
 
         plot.selectAll("line.horizontalGrid")
-            .data(Data.T2px.ticks(4))
+            .data(Fig.T2px.ticks(4))
             .enter()
             .append("line")
             .attr("class", "horizontalGrid")
             .attr("x1", 0)
             .attr("x2", width)
-            .attr("y1", (d) -> Data.T2px d)
-            .attr("y2", (d) -> Data.T2px d)
+            .attr("y1", (d) -> Fig.T2px d)
+            .attr("y2", (d) -> Fig.T2px d)
             .attr("fill", "none")
             .attr("shape-rendering", "crispEdges")
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
 
         plot.selectAll("line.verticalGrid")
-            .data(Data.d2px.ticks(4))
+            .data(Fig.d2px.ticks(4))
             .enter()
             .append("line")
             .attr("class", "verticalGrid")
             .attr("y1", 0)
             .attr("y2", height)
-            .attr("x1", (d) -> Data.d2px d)
-            .attr("x2", (d) -> Data.d2px d)
+            .attr("x1", (d) -> Fig.d2px d)
+            .attr("x2", (d) -> Fig.d2px d)
             .attr("fill", "none")
             .attr("shape-rendering", "crispEdges")
             .attr("stroke", "black")
@@ -327,23 +330,22 @@ class Plot extends d3Object
             .enter()
             .append("circle")
             .attr("class", "marker")
-            .attr("cx", (d) -> Data.d2px d[0])
-            .attr("cy", (d) -> Data.T2px d[1])
+            .attr("cx", (d) -> Fig.d2px d[0])
+            .attr("cy", (d) -> Fig.T2px d[1])
             .attr("r", "5")
             .attr("fill", "none")
             .attr("shape-rendering", "crispEdges")
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
-        ###
 
     initAxes: ->
 
         @xAxis = d3.svg.axis()
-            .scale(Data.d2px)
+            .scale(Fig.d2px)
             .orient("bottom")
 
         @yAxis = d3.svg.axis()
-            .scale(Data.T2px)
+            .scale(Fig.T2px)
             .orient("left")
 
 class Simulation
@@ -351,16 +353,18 @@ class Simulation
     constructor: ->
         @a = 0.5
         @T = 200
+        @angle = 0
         
     start: () ->
         setTimeout (=> @animate() ), 200
         
     snapshot: () ->
-        @T = (1-@a)*@T + @a*Data.d2T(control.d)
+        @T = (1-@a)*@T + @a*Fig.d2T(control.d)
         thermo.val @T
 
     animate: () ->
         @timer = setInterval (=> @snapshot()), 1000
+        
 
     stop: ->
         clearInterval @timer
@@ -391,12 +395,12 @@ class Guide extends d3Object
             .attr('height', height)
 
         # Initial marker positions
-        @x1 = Data.d2px 1.5
-        @y1 = Data.T2px 230 
-        @x2 = Data.d2px 4
-        @y2 = Data.T2px 270
-        @xl = Data.d2px 2
-        @yl = Data.T2px 250
+        @x1 = Fig.d2px 1.5
+        @y1 = Fig.T2px 230 
+        @x2 = Fig.d2px 4
+        @y2 = Fig.T2px 270
+        @xl = Fig.d2px 2
+        @yl = Fig.T2px 250
         
         @circle1 = @region.append("circle")
             .attr("transform", "translate(#{@x1}, #{@y1})")
@@ -477,8 +481,8 @@ class Guide extends d3Object
             .attr("y1",y1)
             .attr("x2",x2)
             .attr("y2",y2)
-        slope = (Data.px2T(y2)-Data.px2T(y1))/(Data.px2d(x2)-Data.px2d(x1))
-        inter = Data.px2T(y1)-slope*Data.px2d(x1)
+        slope = (Fig.px2T(y2)-Fig.px2T(y1))/(Fig.px2d(x2)-Fig.px2d(x1))
+        inter = Fig.px2T(y1)-slope*Fig.px2d(x1)
         d3.select("#equation").html(model_text([inter, slope]))
 
     moveLine: (line, x, y) ->
@@ -525,7 +529,7 @@ class Guide extends d3Object
         </table>
         """    
 
-new Mars
+mars = new Mars
 new Crust
 thermo = new Thermo
 control = new Control
