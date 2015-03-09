@@ -2,7 +2,7 @@
 
 pi = Math.PI
 
-$("#test").attr 'src', 'test.png'
+#$("#test").attr 'src', 'test.png'
 
 $("#idea").attr 'src', 'Mars_pathfinder_panorama_large.jpg'
 $("#data").attr 'src', 'Antwrp_gsfc_nasa_gov_apod_ap040510.jpg'
@@ -11,7 +11,7 @@ $("#analysis").attr 'src', 'Eagle_crater_on_the_Mars_PIA05163.jpg'
 
 class Fig
 
-    @margin = {top: 0, right: 0, bottom: 0, left: 0}
+    @margin = {top: 20, right: 20, bottom: 20, left: 20}
     @width = 480 - @margin.left - @margin.right
     @height = 480 - @margin.top - @margin.bottom
 
@@ -84,7 +84,7 @@ class Mars extends d3Object
                     .transition()
                     .duration(10000)
                     .attr("opacity", 0)
-                    .attr("r", 200)
+                    .attr("r", 250)
                     .ease('linear')
                     .each("end", repeat)
             repeat()
@@ -119,6 +119,12 @@ class Mars extends d3Object
             .attr("stroke-color", "red")
             .attr("d", path);
 
+    stop: () ->
+        d3.select("#mars-heat")
+            .transition()
+            .duration(0)
+    
+        
 
 class Crust extends d3Object
 
@@ -537,3 +543,6 @@ sim = new Simulation
 sim.start()
 new Plot
 new Guide
+
+$("#stop-heat").on "click", =>
+    mars.stop()

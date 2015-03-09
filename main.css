@@ -2,6 +2,26 @@ svg {
     overflow: visible;
 }
 
+.button {
+    cursor: pointer;
+    background: #ddf;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 10px;
+}
+
+
+h2 {
+  font-family: 'Reenie Beanie', cursive;
+  font-size:    40px;
+}
+
+h3 {
+  font-family: 'Reenie Beanie', cursive;
+  font-size:    30px;
+}
+
+
 .text {
     width: 960px;
     margin: 0 auto;
@@ -28,6 +48,13 @@ svg {
     left: 0;
     top:  0;
     margin: 0 auto;
+}
+
+
+#stop-heat {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 
