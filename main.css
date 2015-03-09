@@ -79,6 +79,14 @@ h3 {
     margin: 0 auto;
 }
 
+#thermo-label, #thermo-units {
+    position: absolute;
+    font-family: 'Reenie Beanie', cursive;
+    font-size:    30px;
+
+}
+
+
 #analyze {
     position: relative;
     left: 0;

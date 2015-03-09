@@ -94,7 +94,7 @@ class Mars extends d3Object
             .attr("cx", Fig.width / 2)
             .attr("cy", Fig.height / 2)
             .style("fill", "url(#rad-gradient)")
-            .each(pulse)
+            #.each(pulse)
 
         @projection = d3.geo.orthographic()
             .scale(120)
@@ -131,11 +131,12 @@ class Crust extends d3Object
     constructor: () ->
         super "crust"
 
-        width = Fig.width
-        height = Fig.height*0.4
-        
-        @obj.attr("width", width)
-        @obj.attr("height", height)
+        @obj.attr("width", Fig.width + Fig.margin.left + Fig.margin.right)
+        @obj.attr("height", Fig.height + Fig.margin.top + Fig.margin.bottom)
+
+        @width = Fig.width
+        @height = Fig.height*0.4
+        @y = Fig.height/2
 
         linearGradient = @obj.append("defs").append("linearGradient")
             .attr("id", "lin-gradient")
@@ -156,14 +157,14 @@ class Crust extends d3Object
             .attr("stop-opacity", 1);
 
         soil = @obj.append("rect")
-            .attr('y', Fig.height/2 - height/2)
-            .attr("width", width)
-            .attr("height", height)
+            .attr('y', @y)
+            .attr("width", @width)
+            .attr("height", @height)
             .style("fill", "url(#lin-gradient)");
 
         bore = @obj.append("rect")
-            .attr('y', Fig.height/2 - Fig.boreDia/2)
-            .attr("width", width)
+            .attr('y', @y + @height/2 - Fig.boreDia/2)
+            .attr("width", @width)
             .attr("height", Fig.boreDia)
             .style("fill", 'grey');
 
@@ -174,7 +175,11 @@ class Thermo extends d3Object
         
         super "thermo"
 
-        y = Fig.height/2 - Fig.boreDia/2
+        @obj.attr("width", Fig.width + Fig.margin.left + Fig.margin.right)
+        @obj.attr("height", Fig.height + Fig.margin.top + Fig.margin.bottom)
+
+        console.log "???", crust.y, crust.height/2, Fig.boreDia
+        @y = crust.y + crust.height/2 - Fig.boreDia/2
         
         @thermoDisp = iopctrl.segdisplay()
             .width(80)
@@ -183,34 +188,39 @@ class Thermo extends d3Object
             .decimals(1)
 
         @lift = @obj.append('g')
-
+            .attr("id", "lift")
+            .attr("transform", "translate(0, #{@y})")
+            #.attr("width", 100)
+            #.attr("height", Fig.boreDia)
 
 
         @lift.append("rect")
             .attr('x', 0)
-            .attr('y', y)
+            .attr('y', 0)
             .attr("width", 100)
             .attr("height", Fig.boreDia)
             .style("fill", "green")
             .style("opacity", 0.5);
-        
+
         @lift.append("g")
             .attr("class", "digital-display")
-            .attr("transform", "translate(10, #{y+10})")
+            .attr("transform", "translate(10, 10)")
             .call(@thermoDisp)
+
+
+        d3.select("#thermo-label").style("top", "#{@y-25}px")
+        d3.select("#thermo-units").style("top", "#{@y+Fig.boreDia+5}px")
         
+       
         @depth 0
 
-        #@obj.append("text")
-        #    .attr("text-anchor", "left")
-        #    .attr("x", 50)
-        #    .attr("y", 50)
-        #    .text("GMS braking starts:")
-        #    .attr("title","Global mitigation scheme (GMS) starts at this date.")
             
     val: (u) -> @thermoDisp.value(u)
 
-    depth: (u) -> @lift.attr("transform", "translate(#{Fig.d2px(u)}, 0)")
+    depth: (u) ->
+        @lift.attr("transform", "translate(#{Fig.d2px(u)}, #{@y})")
+        d3.select("#thermo-label").style("left", "#{Fig.d2px(u)+10}px")
+        d3.select("#thermo-units").style("left", "#{Fig.d2px(u)+10}px")
 
 
 class Control extends d3Object
@@ -536,7 +546,7 @@ class Guide extends d3Object
         """    
 
 mars = new Mars
-new Crust
+crust = new Crust
 thermo = new Thermo
 control = new Control
 sim = new Simulation
