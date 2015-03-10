@@ -35,6 +35,8 @@ class Fig
         .range([200, 300])
     @T2d = @d2T.invert
 
+$blab.Fig = Fig
+
 
 class d3Object
 
@@ -189,10 +191,6 @@ class Thermo extends d3Object
 
         @lift = @obj.append('g')
             .attr("id", "lift")
-            .attr("transform", "translate(0, #{@y})")
-            #.attr("width", 100)
-            #.attr("height", Fig.boreDia)
-
 
         @lift.append("rect")
             .attr('x', 0)
@@ -218,9 +216,9 @@ class Thermo extends d3Object
     val: (u) -> @thermoDisp.value(u)
 
     depth: (u) ->
-        @lift.attr("transform", "translate(#{Fig.d2px(u)}, #{@y})")
-        d3.select("#thermo-label").style("left", "#{Fig.d2px(u)+10}px")
-        d3.select("#thermo-units").style("left", "#{Fig.d2px(u)+10}px")
+        @lift.attr("transform", "translate(#{Fig.d2px(u)-50}, #{@y})")
+        d3.select("#thermo-label").style("left", "#{Fig.d2px(u)+10-50}px")
+        d3.select("#thermo-units").style("left", "#{Fig.d2px(u)+10-50}px")
 
 
 class Control extends d3Object
@@ -229,28 +227,37 @@ class Control extends d3Object
         
         super "control"
 
-        y = 100
-        @d = 0
+        @y = 100
+        @d = 2.5
         
         @tape = @obj.append("g")
             .attr("class", "axis")
-            .attr("transform", "translate(#{0}, #{y-20})")
+            .attr("transform", "translate(#{0}, #{@y-20})")
                 .call(@xAxis) 
 
         @guide = @obj.append('line')
             .attr('x1', 0)
             .attr('x2', 0)
-            .attr('y1', 0)
-            .attr('y2', Fig.height)
+            .attr('y1', @y-20)
+            .attr('y2', crust.y+40)
             .style("stroke", 'black')
             .style("stroke-width","1")
+            .style("stroke-dasharray", ("3, 3"))
 
-        @marker()
+        m = @marker()
             .attr("cx", 0)
-            .attr("cy", 25)
+            .attr("cy", (@y+crust.y)/2-10)
 
+        d3.select("#depth-label")
+            .style("top", "25px")
+            .style("left", "#{Fig.width/2-25}px")
+        d3.select("#thermo-left").style("top", "#{(@y+crust.y)/2-20}px")
+        d3.select("#thermo-right").style("top", "#{(@y+crust.y)/2-20}px")
+
+        @dragMarker(m, Fig.d2px(@d))
+        
     marker: () ->
-        m = @tape.append('circle')
+        m = @obj.append('circle')
             .attr('r', 15)
             .style('fill', 'black')
             .style('stroke', 'black')
@@ -260,7 +267,7 @@ class Control extends d3Object
                 .drag()
                 .origin(=>
                     x:m.attr("cx")
-                    y:m.attr("cy")
+                    #y:m.attr("cy")
                 )
                 #.on("drag", => @dragMarker(m, d3.mouse(@plotArea.node())))
                 .on("drag", => @dragMarker(m, d3.event.x))
@@ -268,12 +275,15 @@ class Control extends d3Object
 
     dragMarker: (marker, x) ->
         @d = Fig.px2d x
-        return if  ((@d>5) or (@d<0))
+        @d = 0 if @d<0
+        @d = 5 if @d>5    
+        return if  ((@d>=5) or (@d<=0))
         marker.attr("cx", x)
         thermo.depth @d
         @guide.attr('x1', x)
         @guide.attr('x2', x)
-        
+        d3.select("#thermo-left").style("left", "#{x-105}px")
+        d3.select("#thermo-right").style("left", "#{x+20}px")
 
     initAxes: ->
         @xAxis = d3.svg.axis()
@@ -281,6 +291,7 @@ class Control extends d3Object
             .orient("top")
             .ticks(10)
 
+###
 class Plot extends d3Object
 
     margin = {top: 20, right: 20, bottom: 20, left: 20}
@@ -339,7 +350,7 @@ class Plot extends d3Object
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
 
-        data = [[2, 240], [3, 250]]
+        data = $blab.data # [[2, 240], [3, 250]]
 
         plot.selectAll("circle.marker")
             .data(data)
@@ -363,6 +374,7 @@ class Plot extends d3Object
         @yAxis = d3.svg.axis()
             .scale(Fig.T2px)
             .orient("left")
+###
 
 class Simulation
 
@@ -386,6 +398,7 @@ class Simulation
         clearInterval @timer
         @timer = null
 
+###
 class Guide extends d3Object
 
     r = 10 # circle radius
@@ -545,14 +558,16 @@ class Guide extends d3Object
         </table>
         """    
 
+###
+
 mars = new Mars
 crust = new Crust
 thermo = new Thermo
 control = new Control
 sim = new Simulation
 sim.start()
-new Plot
-new Guide
+#new Plot
+#new Guide
 
 $("#stop-heat").on "click", =>
     mars.stop()

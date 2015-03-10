@@ -83,9 +83,18 @@ h3 {
     position: absolute;
     font-family: 'Reenie Beanie', cursive;
     font-size:    30px;
-
 }
 
+#thermo-left, #thermo-right {
+    position: absolute;
+    font-family: 'Reenie Beanie', cursive;
+    font-size:    20px;
+}
+
+#depth-label {
+    position: absolute;
+    font-size: 14px;
+}
 
 #analyze {
     position: relative;
