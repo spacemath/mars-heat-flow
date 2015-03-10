@@ -256,6 +256,9 @@ class Guide extends d3Object
         </table>
         """    
 
-new Plot
-new Guide
+#new Plot
+#new Guide
+$blab.Plot = Plot
+$blab.Guide = Guide
+
 

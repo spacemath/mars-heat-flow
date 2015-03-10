@@ -7,3 +7,6 @@ data = [
     ]
 
 $blab.data = data #;
+
+new $blab.Plot  #;
+new $blab.Guide  #;
