@@ -1,8 +1,8 @@
 class $blab.Fig
 
-    @margin = {top: 20, right: 20, bottom: 20, left: 20}
-    @width = 480 - @margin.left - @margin.right
-    @height = 480 - @margin.top - @margin.bottom
+    @margin = {top: 50, right: 50, bottom: 50, left: 50}
+    @width = 450 - @margin.left - @margin.right
+    @height = 450 - @margin.top - @margin.bottom
 
     @boreDia = 50
 
