@@ -1,18 +1,7 @@
 #!vanilla
 
 Fig = $blab.Fig
-
-class d3Object
-
-    constructor: (id) ->
-        @element = d3.select "##{id}"
-        @element.selectAll("svg").remove()
-        @obj = @element.append "svg"
-        @initAxes()
-
-    append: (obj) -> @obj.append obj
-    
-    initAxes: ->
+d3Object = $blab.d3Object
 
 class Plot extends d3Object
 
@@ -72,7 +61,7 @@ class Plot extends d3Object
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
 
-        data = $blab.data # [[2, 240], [3, 250]]
+        data = $blab.data
 
         plot.selectAll("circle.marker")
             .data(data)
@@ -110,7 +99,6 @@ class Guide extends d3Object
 
         # housekeeping
         @obj.on("click", null)  # Clear any previous event handlers.
-        #@obj.on("click", => @click())
         d3.behavior.drag().on("drag", null)  # Clear any previous event handlers.
 
         @obj.attr('width', width + margin.left + margin.right)
@@ -256,9 +244,7 @@ class Guide extends d3Object
         </table>
         """    
 
-#new Plot
-#new Guide
-$blab.Plot = Plot
-$blab.Guide = Guide
+new Plot
+new Guide
 
 
