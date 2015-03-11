@@ -8,32 +8,33 @@ class Plot extends d3Object
     margin = {top: 20, right: 20, bottom: 20, left: 20}
     width = 480 - margin.left - margin.right
     height = 480 - margin.top - margin.bottom
+    #data0 = [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
     
-    constructor: (@data) ->
+    constructor: () ->
         
         super "plot"
 
         @obj.attr('width', width + margin.left + margin.right)
-            .attr('height', height/2 + margin.top + margin.bottom)
+            .attr('height', height + margin.top + margin.bottom)
 
-        plot = @obj.append('g')
+        @plot = @obj.append('g')
             .attr("transform", "translate( #{margin.left}, #{margin.top})")
             .attr('width', width)
             .attr('height', height)
 
-        plot.append("g")
+        @plot.append("g")
             .attr("id","x-axis")
             .attr("class", "axis")
             .attr("transform", "translate(0, #{height})")
             .call(@xAxis)
 
-        plot.append("g")
+        @plot.append("g")
             .attr("id","y-axis")
             .attr("class", "axis")
             .attr("transform", "translate(0, 0)")
             .call(@yAxis)
 
-        plot.selectAll("line.horizontalGrid")
+        @plot.selectAll("line.horizontalGrid")
             .data(Fig.T2px.ticks(4))
             .enter()
             .append("line")
@@ -47,7 +48,7 @@ class Plot extends d3Object
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
 
-        plot.selectAll("line.verticalGrid")
+        @plot.selectAll("line.verticalGrid")
             .data(Fig.d2px.ticks(4))
             .enter()
             .append("line")
@@ -61,20 +62,25 @@ class Plot extends d3Object
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
 
-        data = $blab.data
+    update: (data) ->
 
-        plot.selectAll("circle.marker")
+        circle = @plot.selectAll("circle.marker")
             .data(data)
-            .enter()
+
+        circle.exit().remove()
+
+        circle.enter()
             .append("circle")
             .attr("class", "marker")
-            .attr("cx", (d) -> Fig.d2px d[0])
-            .attr("cy", (d) -> Fig.T2px d[1])
             .attr("r", "5")
             .attr("fill", "none")
             .attr("shape-rendering", "crispEdges")
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
+
+        circle
+            .attr("cx", (d) -> Fig.d2px d[0])
+            .attr("cy", (d) -> Fig.T2px d[1])
 
     initAxes: ->
 
@@ -244,7 +250,9 @@ class Guide extends d3Object
         </table>
         """    
 
-new Plot
+#data = [[1, 230], [2, 240], [3, 250], [4, 260], [5, 290]]
+$blab.plot = new Plot #data
+#$blab.plot.update data
 new Guide
 
 

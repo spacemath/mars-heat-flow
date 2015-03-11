@@ -6,8 +6,8 @@
     "blab.coffee", 
     "idea.coffee",
     "meas.coffee",
-    "data.coffee",
     "analysis.coffee",
+    "data.coffee",
     "main.coffee",
     "main.html",
     "main.css"
