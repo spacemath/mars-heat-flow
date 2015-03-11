@@ -112,6 +112,9 @@ class Thermo extends d3Object
 
 class Control extends d3Object
 
+    xlow = Fig.d2px 0
+    xhigh = Fig.d2px 5
+    
     constructor: ->
         
         super "control"
@@ -154,6 +157,7 @@ class Control extends d3Object
         @dragMarker(m, Fig.d2px(@d))
         
     marker: () ->
+
         m = @control.append('circle')
             .attr('r', 15)
             .style('fill', 'black')
@@ -167,18 +171,25 @@ class Control extends d3Object
             )
 
     dragMarker: (marker, x) ->
-        @d = Fig.px2d x
-        @d = 0 if @d<0
-        @d = 5 if @d>5    
-        return if  ((@d>=5) or (@d<=0))
-        marker.attr("cx", x)
+
+        return if  ((x>xhigh) or (x<xlow))
+
+        # quantize
+        @d = Math.round(Fig.px2d(x)*2)/2 # metres
+        xq = Fig.d2px @d # pixels
+
+        # move
+        marker.attr("cx", xq)
+        @guide.attr('x1', xq)
+        @guide.attr('x2', xq)
+        d3.select("#thermo-left").style("left", "#{xq-60}px")
+        d3.select("#thermo-right").style("left", "#{xq+74}px")
+
+        # set thermometer depth
         thermo.depth @d
-        @guide.attr('x1', x)
-        @guide.attr('x2', x)
-        d3.select("#thermo-left").style("left", "#{x-60}px")
-        d3.select("#thermo-right").style("left", "#{x+74}px")
 
     initAxes: ->
+        
         @xAxis = d3.svg.axis()
             .scale(Fig.d2px)
             .orient("top")
