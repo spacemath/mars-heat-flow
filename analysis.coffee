@@ -1,31 +1,34 @@
 #!vanilla
 
+# imports
 Fig = $blab.Fig
 d3Object = $blab.d3Object
 
+# convenience
+w = Fig.width
+W = Fig.width + Fig.margin.left + Fig.margin.right
+h = Fig.height
+H = Fig.height + Fig.margin.top + Fig.margin.bottom
+
+
 class Plot extends d3Object
 
-    margin = {top: 20, right: 20, bottom: 20, left: 20}
-    width = 480 - margin.left - margin.right
-    height = 480 - margin.top - margin.bottom
-    #data0 = [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
-    
     constructor: () ->
         
         super "plot"
 
-        @obj.attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
+        @obj.attr('width', W)
+            .attr('height', H)
 
         @plot = @obj.append('g')
-            .attr("transform", "translate( #{margin.left}, #{margin.top})")
-            .attr('width', width)
-            .attr('height', height)
+            .attr("transform", "translate( #{Fig.margin.left}, #{Fig.margin.top})")
+            .attr('width', w)
+            .attr('height', h)
 
         @plot.append("g")
             .attr("id","x-axis")
             .attr("class", "axis")
-            .attr("transform", "translate(0, #{height})")
+            .attr("transform", "translate(0, #{h})")
             .call(@xAxis)
 
         @plot.append("g")
@@ -40,7 +43,7 @@ class Plot extends d3Object
             .append("line")
             .attr("class", "horizontalGrid")
             .attr("x1", 0)
-            .attr("x2", width)
+            .attr("x2", w)
             .attr("y1", (d) -> Fig.T2px d)
             .attr("y2", (d) -> Fig.T2px d)
             .attr("fill", "none")
@@ -54,7 +57,7 @@ class Plot extends d3Object
             .append("line")
             .attr("class", "verticalGrid")
             .attr("y1", 0)
-            .attr("y2", height)
+            .attr("y2", h)
             .attr("x1", (d) -> Fig.d2px d)
             .attr("x2", (d) -> Fig.d2px d)
             .attr("fill", "none")
@@ -95,9 +98,6 @@ class Plot extends d3Object
 class Guide extends d3Object
 
     r = 10 # circle radius
-    margin = {top: 20, right: 20, bottom: 20, left: 20}
-    width = 480 - margin.left - margin.right
-    height = 480 - margin.top - margin.bottom
     
     constructor: ()->
         
@@ -107,152 +107,93 @@ class Guide extends d3Object
         @obj.on("click", null)  # Clear any previous event handlers.
         d3.behavior.drag().on("drag", null)  # Clear any previous event handlers.
 
-        @obj.attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
+        @obj.attr('width', W)
+            .attr('height', H)
 
         @region = @obj.append('g')
-            .attr("transform", "translate( #{margin.left}, #{margin.top})")
-            .attr('width', width)
-            .attr('height', height)
+            .attr("transform", "translate( #{Fig.margin.left}, #{Fig.margin.top})")
+            .attr('width', w)
+            .attr('height', h)
 
-        # Initial marker positions
-        @x1 = Fig.d2px 1.5
-        @y1 = Fig.T2px 230 
-        @x2 = Fig.d2px 4
-        @y2 = Fig.T2px 270
-        @xl = Fig.d2px 2
-        @yl = Fig.T2px 250
-        
-        @circle1 = @region.append("circle")
-            .attr("transform", "translate(#{@x1}, #{@y1})")
-            .attr("r", r)
-            .attr("xx", @x1)
-            .attr("yy", @y1)
-            .attr("class", "modelcircle")
-            .call(
-                d3.behavior
-                .drag()
-                .on("drag", => @moveCircle(@circle1, d3.event.x, d3.event.y))
-            )
+        d1 = 1.5
+        d2 = 4
+        T1 = 230
+        T2 = 270
 
-        @circle2 = @region.append("circle")
-            .attr("transform", "translate(#{@x2}, #{@y2})")
-            .attr("r", r)
-            .attr("xx", @x2)
-            .attr("yy", @y2)
-            .attr("class", "modelcircle")
-            .call(
-                d3.behavior
-                .drag()
-                .on("drag", => @moveCircle(@circle2, d3.event.x, d3.event.y))
-            )
+        @m1 = @marker()
+            .attr("cx", Fig.d2px d1)
+            .attr("cy", Fig.T2px T1)
 
-        # line connecting circles
-        @line12 = @region.append("line")
-            .attr("x1", @x1)
-            .attr("y1", @y1)
-            .attr("x2", @x2)
-            .attr("y2", @y2)
+        @m2 = @marker()
+            .attr("cx", Fig.d2px d2)
+            .attr("cy", Fig.T2px T2)
+
+        @line = @region.append("line")
+            .attr("x1", @m1.attr("cx"))
+            .attr("y1", @m1.attr("cy"))
+            .attr("x2", @m2.attr("cx"))
+            .attr("y2", @m2.attr("cy"))
             .attr("class", "modelline")
 
-        # vertical dashed line
-        @lineX = @region.append("line")
-            .attr("x1", 0)
-            .attr("y1", margin.top)
-            .attr("x2", 0)
-            .attr("y2", height + margin.top)
-            .attr("class","guideline")
-            .attr("transform", "translate(#{@x1}, #{0})")
-            .attr("xx", @xl)
-            .attr("yy", 0)
-            .attr("style","cursor:crosshair")
-            .call(
-                d3.behavior
-                .drag()
-                .on("drag", => @moveLine(@lineX, d3.event.x, -1))
-            )
-
-        # horizontal dashed line
-        @lineY = @region.append("line")
-            .attr("x1", margin.left)
-            .attr("y1", 0)
-            .attr("x2", width + margin.left)
-            .attr("y2", 0)
-            .attr("class","guideline")
-            .attr("transform", "translate(#{0}, #{@y2})")
-            .attr("xx", 0)
-            .attr("yy", @yl)
-            .attr("style","cursor:crosshair")
-            .call(
-                d3.behavior
-                .drag()
-                .on("drag", => @moveLine(@lineY, -1, d3.event.y))
-            )
- 
-    initAxes: ->
-   
-    moveCircle: (circ, x, y) ->
-        console.log "?????"
-        @dragslide(circ, x, y)
-        x1 = @circle1.attr("xx")
-        y1 = @circle1.attr("yy")
-        x2 = @circle2.attr("xx")
-        y2 = @circle2.attr("yy")
-        @line12.attr("x1",x1)
-            .attr("y1",y1)
-            .attr("x2",x2)
-            .attr("y2",y2)
-        slope = (Fig.px2T(y2)-Fig.px2T(y1))/(Fig.px2d(x2)-Fig.px2d(x1))
-        inter = Fig.px2T(y1)-slope*Fig.px2d(x1)
+        slope = (T2-T1)/(d2-d1)
+        inter = T1-slope*d1
         d3.select("#equation").html(model_text([inter, slope]))
 
-    moveLine: (line, x, y) ->
-        @dragslide(line, x, y)
-        xx = @lineX.attr("xx")
-        yy = @lineY.attr("yy")
-        d3.select("#intersection")
-            .html(lines_text([@x.invert(xx), @y.invert(yy)]))
 
-    dragslide: (obj, x, y) ->
-        xx = 0
-        yy = 0
-        if x>0
-            xx = Math.max(margin.left, Math.min(width+margin.left, x))
-        if y>0
-            yy = Math.max(margin.top, Math.min(height+margin.top, y))
-        obj.attr "transform", "translate(#{xx}, #{yy})"
-        obj.attr("xx", xx)
-        obj.attr("yy", yy)
+    initAxes: ->
+
+    marker: () ->
+
+        m = @region.append('circle')
+            .attr('r', r)
+            .attr("class", "modelcircle")
+            .call(
+                d3.behavior
+                .drag()
+                .origin(=>
+                    x:m.attr("cx")
+                    y:m.attr("cy")
+                )
+                .on("drag", => @dragMarker(m, d3.event.x, d3.event.y))
+            )
+        
+    dragMarker: (marker, x, y) ->
+
+        x=0 if x<0
+        x=w if x>w
+        y=0 if y<0
+        y=h if y>h
+
+        marker.attr("cx", x)
+        marker.attr("cy", y)
+
+        x1 = @m1.attr("cx")
+        y1 = @m1.attr("cy")
+        x2 = @m2.attr("cx")
+        y2 = @m2.attr("cy")
+                
+        @line.attr("x1", x1)
+            .attr("y1", y1)
+            .attr("x2", x2)
+            .attr("y2", y2)
+
+        T1 = Fig.px2T y1
+        T2 = Fig.px2T y2
+        d1 = Fig.px2d x1
+        d2 = Fig.px2d x2
+
+        slope = (T2-T1)/(d2-d1)
+        inter = T1-slope*d1
+        d3.select("#equation").html(model_text([inter, slope]))
 
     model_text = (p) ->
-        a = (n) -> Math.round(100*p[n])/100
-        s = (n) -> "<span style='color:green;font-size:14px'>#{a(n)}</span>"
-        tr = (td1, td2) -> 
-            "<tr><td style='text-align:right;'>#{td1}</td><td>#{td2}</td><tr/>"
         """
         <table class='func'>
-        Model:
-        #{tr "a = ", s(1)}
-        #{tr "b = ", s(0)}
+        <tr><td>Model: a =<td/><td>#{p[1].toFixed(2)} deg.K/m,<td/><td>b =<td/><td>#{p[0].toFixed(2)} deg.K<td/><tr/>
         </table>
-        """    
-
-    lines_text = (p) ->
-        a = (n) -> Math.round(100*p[n])/100
-        s = (n) -> "<span style='color:red;font-size:14px'>#{a(n)}</span>"
-        tr = (td1, td2) -> 
-            "<tr><td style='text-align:right;'>#{td1}</td><td>#{td2}</td><tr/>"
         """
-        <table class='func'>
-        Crosshair:
-        #{tr "x = ", s(0)}
-        #{tr "T = ", s(1)}
-        </table>
-        """    
 
-#data = [[1, 230], [2, 240], [3, 250], [4, 260], [5, 290]]
-$blab.plot = new Plot #data
-#$blab.plot.update data
+$blab.plot = new Plot
 new Guide
 
 
