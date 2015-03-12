@@ -27,13 +27,13 @@ class Plot extends d3Object
 
         @plot.append("g")
             .attr("id","x-axis")
-            .attr("class", "axis")
+            .attr("class", "x axis")
             .attr("transform", "translate(0, #{h})")
             .call(@xAxis)
 
         @plot.append("g")
             .attr("id","y-axis")
-            .attr("class", "axis")
+            .attr("class", "y axis")
             .attr("transform", "translate(0, 0)")
             .call(@yAxis)
 
@@ -47,9 +47,10 @@ class Plot extends d3Object
             .attr("y1", (d) -> Fig.T2px d)
             .attr("y2", (d) -> Fig.T2px d)
             .attr("fill", "none")
-            .attr("shape-rendering", "crispEdges")
-            .attr("stroke", "black")
+            .attr("shape-rendering", "auto")
+            .attr("stroke", "grey")
             .attr("stroke-width", "1px")
+            .attr("opacity", 0.2)
 
         @plot.selectAll("line.verticalGrid")
             .data(Fig.d2px.ticks(4))
@@ -61,9 +62,25 @@ class Plot extends d3Object
             .attr("x1", (d) -> Fig.d2px d)
             .attr("x2", (d) -> Fig.d2px d)
             .attr("fill", "none")
-            .attr("shape-rendering", "crispEdges")
-            .attr("stroke", "black")
+            .attr("shape-rendering", "auto")
+            .attr("stroke", "grey")
             .attr("stroke-width", "1px")
+            .attr("opacity", 0.2)
+
+        @plot.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "end")
+            .attr("dy", -60)
+            .attr("dx", -90)
+            .attr("transform", "rotate(-90)")
+            .text("Temperature (deg. K)")
+
+        @plot.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "end")
+            .attr("dy", h+50)
+            .attr("dx", 220)
+            .text("Depth (m)")
 
     update: (data) ->
 
@@ -147,6 +164,7 @@ class Guide extends d3Object
         m = @region.append('circle')
             .attr('r', r)
             .attr("class", "modelcircle")
+            #.attr("opacity", 0.5)
             .call(
                 d3.behavior
                 .drag()
