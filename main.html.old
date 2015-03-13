@@ -7,53 +7,45 @@
 
   <img id="idea" width="960"></img>
 
-  <div>
+  <div class="left_col">
 
     <h3> The Idea </h3>
 
     <div data-file="idea.coffee" style="display:none"></div>
     <div data-eval="idea.coffee" style="display:none"></div>
 
-    <div id="mars-container">
+    In the winter, you heat the inside of your home to a comfortable
+    temperature. To make sure that this heat stays inside your home
+    you add insulation to your walls and attic.  The inside of Mars is
+    very warm, just like the core of our planet Earth.  This heat
+    travels through the planet and escapes through its surface.  The
+    rock and surface material of Mars acts like the insulation in the
+    attic of a house.  Heat energy escaping the planet's surface is
+    called the heat flux. The change in temperature with depth can be
+    used to figure out what kind of material is in the surface of
+    Mars.
 
+    This lab lets you adjust the heat flow and type of surface
+    material to predict how the surface temperature changes with
+    depth.
 
-      <div id="heat">
-	<div id="mars"></div>
+  </div>
+
+  <div class="right_col">
+
+    <div id="heat">
+
+      <div id="mars"></div>
+      <div id="stop-heat">
+	<span class="button">Stop Animation</span>
       </div>
-
-      <div id="right-mars">
-
-	<div class="shape-right"></div>
-
-	In the winter, you heat the inside of your home to a
-	comfortable temperature. To make sure that this heat stays
-	inside your home you add insulation to your walls and attic.
-	The inside of Mars is very warm, just like the core of our
-	planet Earth.  This heat travels through the planet and
-	escapes through its surface.  The rock and surface material of
-	Mars acts like the insulation in the attic 
-
-      </div>
-
-
-      <div id="left-mars">
-
-	<div class="shape-left"></div>
-
-	of a house. This lab lets you adjust the heat flow and type of surface
-	material to predict how the surface temperature changes with
-	depth. Heat energy escaping the planet's surface is called the
-	heat flux. The change in temperature with depth can be used to
-	figure out what kind of material is in the surface of Mars.
-	<span id="stop-heat" class="button">Stop Animation</span>
-      </div>
-
 
     </div>
 
   </div>
   
   <div class="clear"></div>
+
 
   <br>
 

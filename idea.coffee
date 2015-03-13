@@ -18,6 +18,7 @@ class Mars extends d3Object
 
         @obj.attr('width', W)
             .attr('height', H)
+            #.attr("class", "curve")
 
         @mars = @obj.append('g')
             .attr("transform", "translate( #{Fig.margin.left}, #{Fig.margin.top})")
@@ -52,7 +53,7 @@ class Mars extends d3Object
                     .transition()
                     .duration(10000)
                     .attr("opacity", 0)
-                    .attr("r", 250)
+                    .attr("r", 150)
                     .ease('linear')
                     .each("end", repeat)
             repeat()
@@ -62,10 +63,10 @@ class Mars extends d3Object
             .attr("cx", Fig.width / 2)
             .attr("cy", Fig.height / 2)
             .style("fill", "url(#rad-gradient)")
-            #.each(pulse)
+            .each(pulse)
 
         @projection = d3.geo.orthographic()
-            .scale(150)
+            .scale(100)
             .translate([w/2, h/2])
             .clipAngle(90 + 1e-6)
             .precision(.3)

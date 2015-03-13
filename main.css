@@ -2,6 +2,36 @@ svg {
     overflow: visible;
 }
 
+.shape-right {
+    float: right;
+    shape-outside: circle(120px at 480px 120px);
+    shape-margin: 1em;
+    width:960px;
+    height:240px;
+}
+
+.shape-left {
+    float: left;
+    shape-outside: circle(120px at 480px 120px);
+    shape-margin: 1em;
+    width:960px;
+    height:240px;
+}
+
+#mars-container{
+    position:relative;
+    top:0px
+}
+
+#right-mars {
+    position: relative;
+}
+
+#left-mars {
+    position: absolute;
+    top: 0;
+}
+
 .button {
     cursor: pointer;
     background: #ddf;
@@ -18,7 +48,8 @@ h2 {
 
 h3 {
   font-family: 'Reenie Beanie', cursive;
-  font-size:    30px;
+  font-size:    32px;
+  font-weight: normal;
 }
 
 
@@ -44,19 +75,11 @@ h3 {
 
 
 #heat {
-    position: relative;
-    left: 0;
-    top:  0;
+    position: absolute;
+    left: 245px;
+    top:  -100px;
     margin: 0 auto;
 }
-
-
-#stop-heat {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
 
 #test, #mars {
     position: absolute;
