@@ -3,92 +3,86 @@
 
 <div class="text">
 
-  <h2>Heat-flow and temperature differences in the Martian Crust</h2>
+  <h2>Heat-flow and Temperature Differences in the Martian Crust</h2>
 
-  <img id="idea" width="960"></img>
+  <div class="crop" style="height:160px;margin-bottom:20px;">
+    <img id="idea-img" style="top:0"/>
+  </div> 
 
-  <div>
+  <h3> The Idea </h3>
 
-    <h3> The Idea </h3>
+  <div data-file="idea.coffee" style="display:none"></div>
+  <div data-eval="idea.coffee" style="display:none"></div>
 
-    <div data-file="idea.coffee" style="display:none"></div>
-    <div data-eval="idea.coffee" style="display:none"></div>
+  <div id="mars-container">
 
-    <div id="mars-container">
+    <div id="heat">
+      <div id="mars"></div>
+    </div>
+    
+    <div id="right-mars">
 
+      <div class="shape-right"/>
 
-      <div id="heat">
-	<div id="mars"></div>
-      </div>
+      In the winter, you heat the inside of your home to a comfortable
+      temperature. To make sure that this heat stays inside your home
+      you add insulation to your walls and attic.  The inside of Mars
+      is very warm, just like the core of our planet Earth.  This heat
+      travels through the planet and escapes through its surface.  The
+      rock and surface material of Mars acts like the insulation in
+      the attic
 
-      <div id="right-mars">
+    </div>
 
-	<div class="shape-right"></div>
+    <div id="left-mars">
+      
+      <div class="shape-left"/>
 
-	In the winter, you heat the inside of your home to a
-	comfortable temperature. To make sure that this heat stays
-	inside your home you add insulation to your walls and attic.
-	The inside of Mars is very warm, just like the core of our
-	planet Earth.  This heat travels through the planet and
-	escapes through its surface.  The rock and surface material of
-	Mars acts like the insulation in the attic 
-
-      </div>
-
-
-      <div id="left-mars">
-
-	<div class="shape-left"></div>
-
-	of a house. This lab lets you adjust the heat flow and type of surface
-	material to predict how the surface temperature changes with
-	depth. Heat energy escaping the planet's surface is called the
-	heat flux. The change in temperature with depth can be used to
-	figure out what kind of material is in the surface of Mars.
-	<span id="stop-heat" class="button">Stop Animation</span>
-      </div>
-
+      of a house. This lab lets you adjust the heat flow and type of
+      surface material to predict how the surface temperature changes
+      with depth. Heat energy escaping the planet's surface is called
+      the heat flux. The change in temperature with depth can be used
+      to figure out what kind of material is in the surface of Mars.
+      <span id="stop-heat" class="button">Stop Animation</span>
 
     </div>
 
   </div>
   
-  <div class="clear"></div>
+  <div class="clear"/>
 
-  <br>
-
-  <img id="data" width="960"></img>
+  <div class="crop" style="height:340px;margin-bottom:10px;">
+    <img id="exp-img" style="top:-160px;"/>
+  </div> 
 
   <div class="left_col">
   
-    <h3> The Data </h3>
+    <h3> The Experiment </h3>
 
     <div data-file="meas.coffee" style="display:none"></div>
     <div data-eval="meas.coffee" style="display:none"></div>
 
-    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-    commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-    penatibus et magnis dis parturient montes, nascetur ridiculus
-    mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
-    quis, sem. Nulla consequat massa quis enim. Donec pede justo,
-    fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo,
-    rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum
-    felis eu pede mollis pretium. Integer tincidunt. Cras
-    dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend
-    tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend
-    ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,
-    tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque
-    rutrum. Aenean imperdiet. Etiam ultricies nisi vel
-    augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam
-    rhoncus.
+    This mathematical model uses the equation $F=kT/L$ to predict $T$
+    for various depths below the surface of Mars.  F is the heat flux
+    leaving the surface of Mars and is measured in units of watts per
+    square meter ($W/m^2$).  $k$ is a constant that specifies how much
+    heat travels through a meter of material for a temperature change
+    of exactly 1 kelvin unit.  $T$ is the temperature difference
+    between two points located a distance $L$ meters apart. On Earth
+    it is called the geothermal gradient.
+
+    NASA's InSight mission will deploy an instrument called a Tractor
+    Mole to dig down 5 meters below the surface. It will trail behind
+    itself a string of temperature sensors behind it in the 3-inch
+    diameter tunnel it digs.
   
   </div>
-  
   
   <div class="right_col">
 
     <div id="data">
-      <div id="crust"></div>
+
+      <div id="crust"/>
 
       <div id="thermo">
 	<div id="thermo-label">thermo</div>
@@ -98,30 +92,43 @@
       </div>
 
       <div id="depth-label">depth (m)</div>
-      <div id="control"></div>
+      <div id="control"/>
  
     </div>
 
   </div>
 
-  <div class="clear"></div>
+  <div class="clear"/>
 
-  <hr>
-  <br>
+  <div class="crop" style="height:220px;margin-bottom:20px;margin-top:30px;">
+    <img id="data-img" style="top:-440px;"/>
+  </div> 
 
-  <div class="left_col">
-    <div data-file="data.coffee"></div>
-  </div>    
+  <h3> The Data </h3>
 
-  <div class="right_col">
-    <div data-eval="data.coffee"></div>
+  Enter depth ($d$) and temperature ($T$) below. Press (Shift) +
+  (Enter) to update and plot below.  Click [Save] to keep/share your
+  work.
+
+  You can remove data, for example, by deleting the line beginning
+  data(4).  Similarly, you can add a line beginning data(5). But, the
+  data MUST be numbered sequentially: data(0), data(1), etc.
+
+  <div style="margin-top:20px">
+    <div class="left_col">
+      <div data-file="data.coffee"></div>
+    </div>    
+
+    <div class="right_col">
+      <div data-eval="data.coffee"></div>
+    </div>
   </div>
 
-  <div class="clear"></div>
+  <div class="clear"/>
 
-  <br>
-
-  <img id="analysis" width="960"></img>
+  <div class="crop" style="margin-bottom:20px;margin-top:30px;">
+    <img id="analysis-img" style="top:-800px;"/>
+  </div> 
 
   <div class="left_col">
   
