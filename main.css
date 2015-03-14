@@ -2,6 +2,51 @@ svg {
     overflow: visible;
 }
 
+.text {
+    width: 960px;
+    margin: 0 auto;
+    margin-bottom: 0px;
+}
+
+#heat {
+    position: absolute;
+    left: 245px;
+    top:  -100px;
+    margin: 0 auto;
+}
+
+#mars {
+    position: absolute;
+    left: 0;
+    top:  0;
+    margin: 0 auto;
+}
+
+#right-mars {
+    position: relative;
+}
+
+#left-mars {
+    position: absolute;
+    top: 0;
+}
+
+
+.crop{
+    float:left;
+    overflow:hidden; /* this is important */
+    position:relative; /* this is important too */
+    width:960px;
+    height:220px;
+    }
+
+.crop img{
+    position:absolute;
+    /*top: 0px;*/
+    left: 0px;
+    width: 960px;
+    }
+
 .shape-right {
     float: right;
     shape-outside: circle(120px at 480px 120px);
@@ -23,14 +68,6 @@ svg {
     top:0px
 }
 
-#right-mars {
-    position: relative;
-}
-
-#left-mars {
-    position: absolute;
-    top: 0;
-}
 
 .button {
     cursor: pointer;
@@ -53,11 +90,6 @@ h3 {
 }
 
 
-.text {
-    width: 960px;
-    margin: 0 auto;
-    margin-bottom: 0px;
-}
 
 .left_col {
     float: left;
@@ -74,24 +106,11 @@ h3 {
 }
 
 
-#heat {
-    position: absolute;
-    left: 245px;
-    top:  -100px;
-    margin: 0 auto;
-}
-
-#test, #mars {
-    position: absolute;
-    left: 0;
-    top:  0;
-    margin: 0 auto;
-}
 
 #data {
     position: relative;
     left: 0;
-    top:  0;
+    top:  -20px;
     margin: 0 auto;
 }
 
