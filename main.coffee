@@ -1,13 +1,15 @@
 #!vanilla
 
+$blab.noGitHubRibbon = true;
+
 # import
 Fig = $blab.Fig
 
 # figures
-$("#idea").attr 'src', 'Mars_pathfinder_panorama_large.jpg'
-$("#data").attr 'src', 'Antwrp_gsfc_nasa_gov_apod_ap040510.jpg'
-$("#analysis").attr 'src', 'Eagle_crater_on_the_Mars_PIA05163.jpg'
-
+$("#idea-img").attr 'src', '730932main_pia16079-full_full.jpg'
+$("#exp-img").attr 'src', '730932main_pia16079-full_full.jpg'
+$("#data-img").attr 'src', '730932main_pia16079-full_full.jpg'
+$("#analysis-img").attr 'src', '730932main_pia16079-full_full.jpg'
 
 class Simulation
 
