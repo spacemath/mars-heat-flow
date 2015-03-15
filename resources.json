@@ -10,6 +10,7 @@
     "analysis.coffee",
     "data.coffee",
     "main.coffee",
+    "comp.coffee",
     "main.html",
     "main.css"
 ]
