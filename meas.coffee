@@ -175,7 +175,7 @@ class Control extends d3Object
         return if  ((x>xhigh) or (x<xlow))
 
         # quantize
-        @d = Math.round(Fig.px2d(x)*2)/2 # metres
+        @d = Math.round(Fig.px2d(x)/0.3)*0.3 # metres
         xq = Fig.d2px @d # pixels
 
         # move
