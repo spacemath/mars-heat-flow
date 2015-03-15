@@ -6,16 +6,16 @@ $blab.noGitHubRibbon = true;
 Fig = $blab.Fig
 
 # figures
-$("#idea-img").attr 'src', '730932main_pia16079-full_full.jpg'
-$("#exp-img").attr 'src', '730932main_pia16079-full_full.jpg'
-$("#data-img").attr 'src', '730932main_pia16079-full_full.jpg'
-$("#analysis-img").attr 'src', '730932main_pia16079-full_full.jpg'
+$("#idea-img").attr 'src', 'insight.png'
+$("#exp-img").attr 'src', 'insight.png'
+$("#data-img").attr 'src', 'insight.png'
+$("#analysis-img").attr 'src', 'insight.png'
 
 class Simulation
 
     constructor: ->
         @a = 0.5
-        @T = 200
+        @T = 220
         @angle = 0
         
     start: () ->
