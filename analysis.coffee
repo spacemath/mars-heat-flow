@@ -107,6 +107,7 @@ class Plot extends d3Object
         @xAxis = d3.svg.axis()
             .scale(Fig.d2px)
             .orient("bottom")
+            .ticks(6)
 
         @yAxis = d3.svg.axis()
             .scale(Fig.T2px)
@@ -134,8 +135,8 @@ class Guide extends d3Object
 
         d1 = 1.5
         d2 = 4
-        T1 = 230
-        T2 = 270
+        T1 = 220
+        T2 = 228
 
         @m1 = @marker()
             .attr("cx", Fig.d2px d1)
