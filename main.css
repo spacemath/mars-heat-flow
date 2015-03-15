@@ -2,11 +2,44 @@ svg {
     overflow: visible;
 }
 
+#fig-credit {
+    position:absolute;
+    top:225px;
+    right:155px;
+}
+
+#model-container {
+    height: 750px;
+}
+
+#stop-heat {
+    position: absolute;
+    left: 155px;
+    top: 350px;
+    width: 125px;
+    z-index: 1;
+}
+
+
 .text {
     width: 960px;
     margin: 0 auto;
     margin-bottom: 0px;
 }
+
+.crop{
+    float:left;
+    overflow:hidden;
+    position:relative;
+    width:960px;
+    height:220px;
+    }
+
+.crop img{
+    position:absolute;
+    left: 0px;
+    width: 100%;
+    }
 
 #heat {
     position: absolute;
@@ -32,35 +65,20 @@ svg {
 }
 
 
-.crop{
-    float:left;
-    overflow:hidden; /* this is important */
-    position:relative; /* this is important too */
-    width:960px;
-    height:220px;
-    }
-
-.crop img{
-    position:absolute;
-    /*top: 0px;*/
-    left: 0px;
-    width: 960px;
-    }
-
 .shape-right {
     float: right;
-    shape-outside: circle(120px at 480px 120px);
-    shape-margin: 1em;
+    shape-outside: circle(140px at 480px 150px);
+    shape-margin: 0em;
     width:960px;
-    height:240px;
+    height:300px;
 }
 
 .shape-left {
     float: left;
-    shape-outside: circle(120px at 480px 120px);
-    shape-margin: 1em;
+    shape-outside: circle(140px at 480px 150px);
+    shape-margin: 0em;
     width:960px;
-    height:240px;
+    height:300px;
 }
 
 #mars-container{
@@ -105,8 +123,6 @@ h3 {
     clear: both;
 }
 
-
-
 #data {
     position: relative;
     left: 0;
@@ -119,7 +135,6 @@ h3 {
     left: 0;
     top:  0;
     margin: 0 auto;
-    /*border: 2px solid #c00;*/
 }
 
 #thermo-label, #thermo-units {
