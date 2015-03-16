@@ -160,6 +160,7 @@ class Control extends d3Object
 
         m = @control.append('circle')
             .attr('r', 15)
+            .attr('class', 'control-circle')
             .style('fill', 'black')
             .style('stroke', 'black')
             .style('stroke-width','1')

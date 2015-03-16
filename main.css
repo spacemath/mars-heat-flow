@@ -232,6 +232,9 @@ path {
   shape-rendering: auto;
 }
 
+.control-circle {
+    cursor: ew-resize;
+}
 
 .foot .puzlet-link { float:left }
 .foot .org-link { float:right }
