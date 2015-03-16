@@ -35,7 +35,8 @@
       walls. From experience, we know that if you plot the temperature
       through a wall it will be a straight line. We also know that the
       slope of that line depends on the quality of the
-      insulation---the [https://en.wikipedia.org/wiki/Thermal_conductivity heat
+      insulation---the
+      [https://en.wikipedia.org/wiki/Thermal_conductivity thermal
       conductivity]. For the same amount of escaping heat, a high
       quality insulation will create a higher slope (bigger
       temperature difference between outside and inside).
@@ -79,13 +80,13 @@
 
     Our ideas about heat-flux can be written simply:
 
-    $$ T(x) = a + bx$$ 
+    $$ T(x) = ax + b$$ 
 
     That is, the temperature $T$ (deg. K) is just a line (depending on
-    the depth, $x$, below the surface) with slope $b$ and intercept
-    $a$ (but, we don't care about $a$ here). From theory, we know the
-    slope is $b=F/k$, where $F$ (W/m<sup>2</sup>) is the heat flux and
-    $k$ (W/mK) represents the quality of the "insulation".
+    the depth, $x$, below the surface) with slope $a$ and intercept
+    $b$ (but, we don't care about $b$ here). From theory, we know the
+    slope is $a=F/k$, where $F$ (W/m<sup>2</sup>) is the heat flux and
+    $k$ (W/mK) is the thermal conductvity.
 
     On the right, using the black dot, you can drag The Mole to change
     its depth. At several depths, wait for the instrument to settle
@@ -170,7 +171,7 @@
       green circles to model the data with a line, and note the
       parameters (slope $a$ and intercept $b$) at the top.
 
-      Recall that $b=F/k$, and since we have an estimate for $b$ it
+      Recall that $a=F/k$, and since we have an estimate for $a$ it
       remains to figure out a value for the thermal conductivity $k$.
 
       The value of $k$ varies over the surface:
@@ -181,7 +182,7 @@
 	<li>Thick crust: $k=0.02$ (W/mK)</li>
       </ul>
       Assuming the insight lander touches down on thick crust, enter
-      your value for $b$ below to esimate the heat-flux, $F$
+      your value for $a$ below to esimate the heat-flux, $F$
       (&lbrack;Shift&rbrack;+&lbrack;Enter&rbrack; to compute).
 
     </div>
