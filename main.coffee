@@ -14,15 +14,14 @@ $("#analysis-img").attr 'src', 'insight.png'
 class Simulation
 
     constructor: ->
-        @a = 0.5
-        @T = 220
-        @angle = 0
+        @r = 0.5 # low-pass bandwidth
+        @T = 220 # instrument temp at t=0.
         
     start: () ->
         setTimeout (=> @animate() ), 200
         
     snapshot: () ->
-        @T = (1-@a)*@T + @a*Fig.d2T($blab.control.d)
+        @T = (1-@r)*@T + @r*Fig.d2T($blab.control.d)
         $blab.thermo.val @T
 
     animate: () ->
