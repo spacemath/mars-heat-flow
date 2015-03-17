@@ -100,7 +100,6 @@ class Thermo extends d3Object
         d3.select("#thermo-units").style("top", "#{@y+Fig.boreDia+5}px")
         
         @depth 0
-
             
     val: (u) -> @thermoDisp.value(u)
 
