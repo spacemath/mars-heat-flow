@@ -2,6 +2,51 @@ svg {
     overflow: visible;
 }
 
+h2 {
+  font-family: 'Reenie Beanie', cursive;
+  font-size:    40px;
+}
+
+h3 {
+  font-family: 'Reenie Beanie', cursive;
+  font-size:    32px;
+  font-weight: normal;
+}
+
+.left_col {
+    float: left;
+    width: 450px;
+}
+
+.right_col {
+    float: right;
+    width: 450px;
+}
+
+.clear {
+    clear: both;
+}
+
+.text {
+    width: 960px;
+    margin: 0 auto;
+    margin-bottom: 0px;
+}
+
+.crop{
+    float:left;
+    overflow:hidden;
+    position:relative;
+    width:960px;
+    height:220px;
+}
+
+.crop img{
+    position:absolute;
+    left: 0px;
+    width: 100%;
+}
+
 #fig-credit {
     position:absolute;
     top:225px;
@@ -20,32 +65,16 @@ svg {
     z-index: 1;
 }
 
-
-.text {
-    width: 960px;
-    margin: 0 auto;
-    margin-bottom: 0px;
-}
-
-.crop{
-    float:left;
-    overflow:hidden;
-    position:relative;
-    width:960px;
-    height:220px;
-    }
-
-.crop img{
-    position:absolute;
-    left: 0px;
-    width: 100%;
-    }
-
 #heat {
     position: absolute;
     left: 245px;
     top:  -100px;
     margin: 0 auto;
+}
+
+#mars-container{
+    position:relative;
+    top:0px
 }
 
 #mars {
@@ -64,7 +93,6 @@ svg {
     top: 0;
 }
 
-
 .shape-right {
     float: right;
     shape-outside: circle(140px at 480px 150px);
@@ -81,53 +109,12 @@ svg {
     height:300px;
 }
 
-#mars-container{
-    position:relative;
-    top:0px
-}
-
-
 .button {
     cursor: pointer;
     background: #ddf;
     padding-left: 5px;
     padding-right: 5px;
     border-radius: 10px;
-}
-
-
-h2 {
-  font-family: 'Reenie Beanie', cursive;
-  font-size:    40px;
-}
-
-h3 {
-  font-family: 'Reenie Beanie', cursive;
-  font-size:    32px;
-  font-weight: normal;
-}
-
-
-
-.left_col {
-    float: left;
-    width: 450px;
-}
-
-.right_col {
-    float: right;
-    width: 450px;
-}
-
-.clear {
-    clear: both;
-}
-
-#data {
-    position: relative;
-    left: 0;
-    top:  -20px;
-    margin: 0 auto;
 }
 
 #crust, #thermo, #control {
@@ -152,6 +139,13 @@ h3 {
 #depth-label {
     position: absolute;
     font-size: 14px;
+}
+
+#data {
+    position: relative;
+    left: 0;
+    top:  -20px;
+    margin: 0 auto;
 }
 
 #analyze {
@@ -184,24 +178,19 @@ h3 {
     margin: 0 auto;
 }
 
-
 .modelline {
     fill: none;
     stroke: green;
     stroke-width: 2;
-    /*shape-rendering: crispEdges;*/
 }
 
 .modelcircle {
     fill: green;
     stroke: black;
     stroke-width: 2;
-    /*shape-rendering: crispEdges;*/
     cursor: pointer;
     opacity: 0.5;
 }
-
-
 
 .digital-display .on {
     fill: black;
@@ -211,7 +200,6 @@ h3 {
     fill: white;
     opacity: 0;
 }
-
 
 path {
   fill: none;
