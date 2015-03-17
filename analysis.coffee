@@ -10,10 +10,9 @@ W = Fig.width + Fig.margin.left + Fig.margin.right
 h = Fig.height
 H = Fig.height + Fig.margin.top + Fig.margin.bottom
 
-
 class Plot extends d3Object
 
-    constructor: () ->
+    constructor: ->
         
         super "plot"
 
@@ -157,7 +156,6 @@ class Guide extends d3Object
         inter = T1-slope*d1
         d3.select("#equation").html(model_text([inter, slope]))
 
-
     initAxes: ->
 
     marker: () ->
@@ -165,7 +163,6 @@ class Guide extends d3Object
         m = @region.append('circle')
             .attr('r', r)
             .attr("class", "modelcircle")
-            #.attr("opacity", 0.5)
             .call(
                 d3.behavior
                 .drag()
