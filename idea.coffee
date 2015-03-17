@@ -18,7 +18,6 @@ class Mars extends d3Object
 
         @obj.attr('width', W)
             .attr('height', H)
-            #.attr("class", "curve")
 
         @mars = @obj.append('g')
             .attr("transform", "translate( #{Fig.margin.left}, #{Fig.margin.top})")
