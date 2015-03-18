@@ -52,7 +52,7 @@ class Mars extends d3Object
                     .transition()
                     .duration(10000)
                     .attr("opacity", 0)
-                    .attr("r", 150)
+                    .attr("r", 200)
                     .ease('linear')
                     .each("end", repeat)
             repeat()
@@ -65,7 +65,7 @@ class Mars extends d3Object
             .each(pulse)
 
         @projection = d3.geo.orthographic()
-            .scale(100)
+            .scale(150)
             .translate([w/2, h/2])
             .clipAngle(90 + 1e-6)
             .precision(.3)

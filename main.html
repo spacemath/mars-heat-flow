@@ -18,51 +18,39 @@
   <div data-file="idea.coffee" style="display:none"></div>
   <div data-eval="idea.coffee" style="display:none"></div>
 
-  <div id="mars-container">
+  <div class="left_col">
 
-    <div id="heat">
-      <div id="mars"/>
-      <span id="stop-heat" class="button">Stop Animation</span>
-    </div>
-    
-    <div id="right-mars">
+    To keep heat inside your home you add insulation to the
+    walls. From experience, we know that if you plot the temperature
+    through a wall it will be a straight line. We also know that the
+    slope of that line depends on the quality of the insulation---the
+    [https://en.wikipedia.org/wiki/Thermal_conductivity thermal
+    conductivity]. For the same amount of escaping heat, a high
+    quality insulation will create a higher slope (bigger temperature
+    difference between outside and inside).
 
-      <div class="shape-right"/>
+    The core of Mars is hot (like your home).  By measuring the slope
+    of the temperature change in the
+    [https://en.wikipedia.org/wiki/Crust_(geology) crust] (which
+    insulates like your walls) we can estimate the amount of heat
+    ([https://en.wikipedia.org/wiki/Heat_flux heat flux]) escaping the
+    surface. As part of NASA's [https://en.wikipedia.org/wiki/InSight
+    insight] mission, the HP3 instrument (nickname: The Mole, shown
+    below) will drill 5m into the surface and measure the temperature
+    every 30cm.
 
-      To keep heat inside your home you add insulation to the
-      walls. From experience, we know that if you plot the temperature
-      through a wall it will be a straight line. We also know that the
-      slope of that line depends on the quality of the
-      insulation---the
-      [https://en.wikipedia.org/wiki/Thermal_conductivity thermal
-      conductivity]. For the same amount of escaping heat, a high
-      quality insulation will create a higher slope (bigger
-      temperature difference between outside and inside).
-
-      The core of Mars is hot (like your home).
-
-    </div>
-
-    <div id="left-mars">
-      
-      <div class="shape-left"/>
-
-      By measuring the slope of the temperature change in the crust
-      (which insulates like your walls) we can estimate the amount of
-      heat ([https://en.wikipedia.org/wiki/Heat_flux heat flux])
-      escaping the surface. As part of NASA's
-      [https://en.wikipedia.org/wiki/InSight insight] mission, the HP3
-      instrument (nickname: The Mole, shown below) will drill 5m into
-      the surface and measure the temperature every 30cm.
-
-      In this lab, you will plot the temperature at various depths in
-      the Martian soil. From the slope, and heat conductivity of the
-      crust, you can compute the heat flux of Mars.
-
-    </div>
+    In this lab, you will observe and plot the temperature at various
+    depths in the Martian soil. From the slope, and thermal
+    conductivity of the crust, you can compute the heat flux of Mars.
 
   </div>
-  
+
+  <div class="right_col">
+    <div id="mars">
+      <span id="stop-heat" class="button">Stop Animation</span>
+    </div>
+  </div>
+
   <div class="clear"/>
 
   <div class="crop" style="height:340px;margin-bottom:20px;margin-top:20px;">
